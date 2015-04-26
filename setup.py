@@ -5,8 +5,12 @@ response
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 
-CONSUMER_KEY = 'yqDqAyjJykTZpBdrFHYy'
-CONSUMER_SECRET = 'vPWmIYaRFzKDabjaZCUmiundFqjCvbkb'
+with open(consumer.key) as com_key:
+    CONSUMER_KEY = com_key.read()
+
+with open(consumer.scrt) as com_scrt:
+    CONSUMER_SECRET = cpm_scrt.read()
+
 REQUEST_TOKEN_URL = 'https://api.discogs.com/oauth/request_token'
 AUTHENTICATE_URL = 'https://www.discogs.com/oauth/authorize'
 ACCESS_TOKEN_URL = 'https://api.discogs.com/oauth/access_token'
