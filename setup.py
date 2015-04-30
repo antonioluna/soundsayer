@@ -7,7 +7,11 @@ response
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 
+
+#Url fija de la API
 scrobble = requests.get('http://ws.audioscrobbler.com/2.0/?')
+
+#Métodos aceptados por la API
 
 metodos = {'album_informacion': 'Album.getInfo',
 'album_comentarios': 'Album.getShouts', 'album_etiquetas': 'Album.getTags',
@@ -27,4 +31,26 @@ metodos = {'album_informacion': 'Album.getInfo',
 'geo_chart_semanal': 'Geo.getMetroWeeklyChartlist',
 'geo_artistas_ciudad': 'Geo.getTopArtists',
 'geo_canciones_ciudad': 'Geo.getTopTracks',
-'geo_obtener_ciudades': 'Geo.getMetros'}
+'geo_obtener_ciudades': 'Geo.getMetros',
+
+'grupo_miembros': 'Group.getMembers',
+'grupos_semana_album_chart': 'Group.getWeeklyAlbumChart',
+'grupos_semana_artista_chart': 'Group.getWeeklyArtistChart',
+'grupos_chart_semanal': 'Group.getWeeklyChartList',
+'grupos_chart_semanal_canciones': 'Group.getWeeklyTrackChart',
+
+'etiquetas_informacion': 'Tag.getInfo', 'etiquetas_similar': 'Tag.getSimilar',
+'etiquetas_top_albums': 'Tag.getTopAlbums',
+'etiquetas_top_artistas': 'Tag.getTopArtists',
+'etiquetas_top': 'Tag.getTopTags',
+'etiquetas_top_canciones': 'Tag.getTopTracks',
+'etiquetas_chart_top_artistas': 'Tag.getWeeklyArtistChart',
+'etiquetas_lista_charts_semanal': 'Tag.getWeeklyChartList',
+'buscar_tag': 'Tag.search',
+
+'track_enlaces_compra': 'Track.getBuylinks',
+'track_correccion': 'Track.getCorrection', 'track_informacion': 'Track.getInfo',
+'track_similares': 'Track.getSimilar', 'track_tags': 'Track.getTags',
+'track_buscar': 'Track.search'}
+
+args = {}
