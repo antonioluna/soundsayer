@@ -9,7 +9,11 @@ from requests_oauthlib import OAuth1, OAuth1Session
 
 
 #Url fija de la API
-scrobble = requests.get('http://ws.audioscrobbler.com/2.0/?')
+scrobble = 'http://ws.audioscrobbler.com/2.0/?'
+
+#API KEY
+
+api_key = 'a481b1c89d1295cfc279eddb15090338'
 
 #Métodos aceptados por la API
 
@@ -53,4 +57,21 @@ metodos = {'album_informacion': 'Album.getInfo',
 'track_similares': 'Track.getSimilar', 'track_tags': 'Track.getTags',
 'track_buscar': 'Track.search'}
 
-args = {}
+
+album_args = {'method': metodos['artista_buscar'], 'artist': '',
+'api_key': api_key, 'format': 'json'}
+artista_args = {}
+geo_args = {}
+grupos_args = {}
+etiquetas_args = {}
+tracks_args = {}
+
+album_args['artist'] = album_args['artist'] + 'the prodigy'
+print album_args['artist']
+
+r = requests.get(scrobble, params = album_args)
+
+variable = r.json
+
+for x in r:
+    print x
