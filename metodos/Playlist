@@ -1,0 +1,7 @@
+Playlist
+Playlist.addTrack
+Playlist.create
+Radio
+Radio.getPlaylist
+Radio.search
+Radio.tune

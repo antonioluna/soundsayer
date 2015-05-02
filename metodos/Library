@@ -1,0 +1,11 @@
+Library
+Library.addAlbum
+Library.addArtist
+Library.addTrack
+Library.getAlbums
+Library.getArtists
+Library.getTracks
+Library.removeAlbum
+Library.removeArtist
+Library.removeScrobble
+Library.removeTrack

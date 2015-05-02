@@ -1,0 +1,4 @@
+Venue
+Venue.getEvents
+Venue.getPastEvents
+Venue.search

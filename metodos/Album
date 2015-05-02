@@ -1,0 +1,10 @@
+Album
+Album.addTags
+Album.getBuylinks
+Album.getInfo
+Album.getShouts
+Album.getTags
+Album.getTopTags
+Album.removeTag
+Album.search
+Album.share
