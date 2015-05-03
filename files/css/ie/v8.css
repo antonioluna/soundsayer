@@ -1,26 +1,18 @@
-/*
-	Aerial by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+/*********************************************************************************/
+/* Basic                                                                         */
+/*********************************************************************************/
 
-/* Header */
+	.button
+	{
+		/*
+		
+		For elements that use border-radius, add the following:
+		
+			-ms-behavior: url('css/ie/PIE.htc');
 
-	#header nav a {
-		position: relative;
-		border: solid 1px white;
-		border-radius: 100%;
-		-ms-behavior: url("css/ie/PIE.htc");
-	}
+		Note that PIE.htc requires its elements to be relative or absolute:
 
-		#header nav a:before {
-			border: 0;
-		}
+			position: relative;
 
-/* Footer */
-
-	#footer {
-		background-image: url("images/footer.png");
-		background-position: bottom left;
-		background-repeat: repeat-x;
+		*/
 	}
