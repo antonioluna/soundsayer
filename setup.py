@@ -3,10 +3,20 @@
 #Importamos librerias
 
 from bottle import default_app, get, post, template, request, static_file,\
-response
+response, run, route
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
+
+
+@route('/')
+def index():
+    return template('index.tpl')
+
+
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='static')
 
 
 #Url fija de la API
@@ -59,25 +69,17 @@ metodos = {'album_informacion': 'Album.getInfo',
 'track_buscar': 'Track.search'}
 
 
-
-
-artista_args = {}
-geo_args = {}
-grupos_args = {}
-etiquetas_args = {}
-tracks_args = {}
-
-
 #DEMOSTRACION DE USO DE UNA PETICION GET CON REQUESTS
 
 album_args = {'method': metodos['artista_buscar'], 'artist': '',
 'api_key': api_key, 'format': 'json', 'limit': '1'}
 
 album_args['artist'] = 'the prodigy'
-print album_args['artist']
 
 r = requests.get(scrobble, params=album_args)
 
 variable = json.loads(r.text)
 
-print type(variable["results"]['artistmatches']['artist'])
+#print type(variable["results"]['artistmatches']['artist'])
+
+run(host='localhost', port=8080)
