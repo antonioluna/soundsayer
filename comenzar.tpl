@@ -30,7 +30,7 @@
 				
 				<!-- Logo -->
 				<div id="logo">
-					<h1><a href="#">SOUNDSAYER</a></h1>
+					<h1><a href="/">SOUNDSAYER</a></h1>
 					<span>Comenzando</span>
 				</div>
 				
@@ -52,7 +52,7 @@
 						<p>SoundSayer necesita conocer sus gustos para sugerir las listas de reproducción.
 							<br>Por favor para registrarse introduzca su correo electrónico, su nombre y una contraseña para SoundSayer.
 						</p>
-						<p><a href="#" class="button">Deseo registrarme</a></p>
+						<p><a href="/registro" class="button">Deseo registrarme</a></p>
 						<p><a href="#" class="button">Iniciar sesión</a></p>
 					</div>
 				</div>

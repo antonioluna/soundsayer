@@ -22,9 +22,45 @@ def server_static(filepath):
 def index():
     return template('index.tpl')
 
+
 @route('/comenzar')
 def comenzar():
     return template('comenzar.tpl')
+
+
+@route('/registro')
+def registro():
+    return template('registro.tpl')
+
+
+#Intendando hacer request a plantilla de registro
+#@route('/registro')
+#def login():
+    #return '''
+    #<form name="login" action="index_submit" method="get" \
+    #accept-charset="utf-8">
+    #<ul>
+        #<li><label for="usermail">Dr. Correo</label>
+        #<input type="email" name="usermail" placeholder="nombre@email.com" \
+        #required></li>
+        #<li><label for="password">Password</label>
+        #<input type="password" name="password" placeholder="Contraseña" \
+        #required></li>
+        #<li>
+        #<input type="submit" value="Registrarse" class="button"></li>
+        #</ul>
+    #</form>
+    #'''
+
+
+#@route('/registro', method='POST')
+#def do_login():
+    #username = request.forms.get('usermail')
+    #password = request.forms.get('password')
+    #if check_login(usermail, password):
+        #return "<p>Your login information was correct.</p>"
+    #else:
+        #return "<p>Login failed.</p>"
 
 
 #Url fija de la API
