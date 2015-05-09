@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Iridium by TEMPLATED</title>
+		<title>SoundSayer - Comenzar</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -48,7 +48,7 @@
 				<div class="row">
 					<div class="-3u">
 						<h2>¿Nos conocemos?</h2>
-						<a href="#" class="image full"><img src="/static/images/pic01.jpg" alt="" /></a>
+						<a href="#" class="image full"><img src="/static/images/tango.jpg" alt="" /></a>
 						<p>SoundSayer necesita conocer sus gustos para sugerir las listas de reproducción.
 							<br>Por favor para registrarse introduzca su correo electrónico, su nombre y una contraseña para SoundSayer.
 						</p>
