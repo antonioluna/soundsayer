@@ -37,7 +37,7 @@
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
-						<li class="active"><a href="#"><h5>¿Comenzamos?</h5></a></li>
+						<li class="active"><a href="/comenzar"><h6>¿Comenzamos?</h6></a></li>
 					</ul>
 				</nav>
 			</div>

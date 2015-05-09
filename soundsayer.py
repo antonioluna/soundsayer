@@ -9,9 +9,17 @@ from requests_oauthlib import OAuth1, OAuth1Session
 import json
 
 
+#------------------------------------------------------------------------------
+#Parte fija local
+#------------------------------------------------------------------------------
+
 @route('/')
 def index():
     return template('index.tpl')
+
+@route('/comenzar')
+def comenzar():
+    return template('comenzar.tpl')
 
 
 @route('/static/<filepath:path>')
@@ -82,4 +90,8 @@ variable = json.loads(r.text)
 
 #print type(variable["results"]['artistmatches']['artist'])
 
+
+#------------------------------------------------------------------------------
+#Parte fija local
+#------------------------------------------------------------------------------
 run(host='localhost', port=8080)
