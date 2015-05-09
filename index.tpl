@@ -16,11 +16,9 @@
 		<script src="/static/js/skel.min.js"></script>
 		<script src="/static/js/skel-panels.min.js"></script>
 		<script src="/static/js/init.js"></script>
-		<noscript>
-			<link rel="stylesheet" href="/static/css/skel-noscript.css" />
-			<link rel="stylesheet" href="/static/static/css/style.css" />
-			<link rel="stylesheet" href="/static/css/style-desktop.css" />
-		</noscript>
+		<link rel="stylesheet" href="/static/css/skel-noscript.css" />
+		<link rel="stylesheet" href="/static/css/style.css" />
+		<link rel="stylesheet" href="/static/css/style-desktop.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="/static/css/ie/v8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="/static/css/ie/v9.css" /><![endif]-->
 	</head>
@@ -39,10 +37,7 @@
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
-						<li class="active"><a href="index.html"><h5>¿Comenzamos?</h5></a></li>
-						<li><a href="left-sidebar.html">Left Sidebar</a></li>
-						<li><a href="right-sidebar.html">Right Sidebar</a></li>
-						<li><a href="no-sidebar.html">No Sidebar</a></li>
+						<li class="active"><a href="#"><h5>¿Comenzamos?</h5></a></li>
 					</ul>
 				</nav>
 			</div>
