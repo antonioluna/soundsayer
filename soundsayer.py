@@ -9,6 +9,11 @@ from requests_oauthlib import OAuth1, OAuth1Session
 import json
 
 
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='static')
+
+
 #------------------------------------------------------------------------------
 #Parte fija local
 #------------------------------------------------------------------------------
@@ -20,11 +25,6 @@ def index():
 @route('/comenzar')
 def comenzar():
     return template('comenzar.tpl')
-
-
-@route('/static/<filepath:path>')
-def server_static(filepath):
-    return static_file(filepath, root='static')
 
 
 #Url fija de la API
