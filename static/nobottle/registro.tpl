@@ -49,18 +49,18 @@
 					<div class="-3u">
 						<h2>Registrese y no tendrá que preocuparse por la música</h2>
 						<a href="#" class="image full"><img src="/static/images/registro.jpg" alt="" /></a>
-						<p> 
-							<form name="login" action="index_submit" method="get" accept-charset="utf-8">
-    							<ul>
-        							<li><label for="usermail">Dr. Correo</label>
-        							<input type="email" name="usermail" placeholder="nombre@email.com" required></li>
-        							<li><label for="password">Password</label>
-        							<input type="password" name="password" placeholder="Contraseña" required></li>
-        							<li>
-        							<input type="submit" value="Registrarse" class="button"></li>
-    							</ul>
+						<p>
+							<form name="login" action="index_submit" method="post" accept-charset="utf-8">
+								<ul>
+									<li><label for="usermail">Dr. Correo</label>
+									<input type="email" name="usermail" placeholder="nombre@email.com" required></li>
+									<li><label for="password">Password</label>
+									<input type="password" name="password" placeholder="Contraseña" required></li>
+									<li>
+									<input type="submit" value="Registrarse" class="button"></li>
+									</ul>
 							</form>
-                    	</p>
+						</p>
 					</div>
 				</div>
 			</div>
