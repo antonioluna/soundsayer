@@ -9,6 +9,7 @@ from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
 import crypt
+import flask_login
 
 
 @route('/static/<filepath:path>')
