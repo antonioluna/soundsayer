@@ -3,20 +3,17 @@ from beaker.middleware import SessionMiddleware
 from cork import Cork
 import logging
 
-logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', 
-level=logging.DEBUG)
+logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
 bottle.debug(True)
 
 # Use users.json and roles.json in the local example_conf directory
-aaa = Cork('example_conf', email_sender='federico.ceratto@gmail.com', 
-smtp_url='smtp://smtp.magnet.ie')
+aaa = Cork('example_conf', email_sender='federico.ceratto@gmail.com', smtp_url='smtp://smtp.magnet.ie')
 
 app = bottle.app()
 session_opts = {
     'session.cookie_expires': True,
-    'session.encrypt_key': 'please use a random key and keep it 
-secret!',
+    'session.encrypt_key': 'please use a random key and keep it secret!',
     'session.httponly': True,
     'session.timeout': 3600 * 24,  # 1 day
     'session.type': 'cookie',
@@ -40,8 +37,7 @@ def login():
     """Authenticate users"""
     username = post_get('username')
     password = post_get('password')
-    aaa.login(username, password, success_redirect='/', 
-fail_redirect='/login')
+    aaa.login(username, password, success_redirect='/', fail_redirect='/login')
 
 @bottle.route('/user_is_anonymous')
 def user_is_anonymous():
@@ -58,8 +54,7 @@ def logout():
 @bottle.post('/register')
 def register():
     """Send out registration email"""
-    aaa.register(post_get('username'), post_get('password'), 
-post_get('email_address'))
+    aaa.register(post_get('username'), post_get('password'), post_get('email_address'))
     return 'Please check your mailbox.'
 
 
@@ -98,8 +93,7 @@ def change_password():
 def index():
     """Only authenticated users can see this"""
     aaa.require(fail_redirect='/login')
-    return 'Welcome! <a href="/admin">Admin page</a> <a 
-href="/logout">Logout</a>'
+    return 'Welcome! <a href="/admin">Admin page</a> <a href="/logout">Logout</a>'
 
 
 @bottle.route('/restricted_download')
@@ -135,8 +129,7 @@ def admin():
 @bottle.post('/create_user')
 def create_user():
     try:
-        aaa.create_user(postd().username, postd().role, 
-postd().password)
+        aaa.create_user(postd().username, postd().role, postd().password)
         return dict(ok=True, msg='')
     except Exception, e:
         return dict(ok=False, msg=e.message)

@@ -2,7 +2,7 @@
 
 #Importamos librerias
 
-from bottle import default_app, get, post, template, request, static_file,\
+from bottle import get, post, template, request, static_file,\
 response, run, route
 from bottle_session import SessionPlugin
 import requests
@@ -15,9 +15,21 @@ from cork import Cork
 import logging
 
 
-sesion = SessionPlugin(cookie_lifetime=600)
+#Gestión json usuarios
+
+json_usuarios = Cork('./static/users')
+session_opts = {
+    'session.cookie_expires': True,
+    'session.encrypt_key': 'please use a random key and keep it secret!',
+    'session.httponly': True,
+    'session.timeout': 3600 * 24,
+    'session.type': 'cookie',
+    'session.validate_key': True,
+}
+SessionMiddleware(session_opts)
 
 
+#Ruta estatica
 @route('/static/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='static')
@@ -46,6 +58,7 @@ def comprobar_login(salt, palabra, archivosh):
     for z in archivosh:
         if crypt.crypt(palabra, salt) == z[1]:
             return True
+
 
 
 @route('/')
@@ -80,7 +93,8 @@ accept-charset="utf-8">
             <ul>
                 <li><label>Dr. Correo</label>
 
-                <input type="email" name="usermail" \
+                <input type="email" name="usermai
+l" \
 placeholder="nombre@email.com" required></li>
 
                 <li><label>Password</label>
