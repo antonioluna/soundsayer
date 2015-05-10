@@ -4,12 +4,15 @@
 
 from bottle import default_app, get, post, template, request, static_file,\
 response, run, route
+from bottle_session import SessionPlugin
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
 import crypt
-import flask_login
+
+
+sesion = SessionPlugin(cookie_lifetime=600)
 
 
 @route('/static/<filepath:path>')
