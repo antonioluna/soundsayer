@@ -10,6 +10,9 @@ from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
 import crypt
+from beaker.middleware import SessionMiddleware
+from cork import Cork
+import logging
 
 
 sesion = SessionPlugin(cookie_lifetime=600)
