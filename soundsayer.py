@@ -7,6 +7,8 @@ response, run, route
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
+import random
+import crypt
 
 
 @route('/static/<filepath:path>')
@@ -17,6 +19,27 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 #Parte fija local
 #------------------------------------------------------------------------------
+
+
+#Función que encripta texto
+def encriptar(cont):
+    sal = ""
+    for x in range(8):
+        sal = sal + random.choice(["0", "1", "2", "3", "4", "5", "6", "7", "8",
+            "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+            "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y",
+            "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+            "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
+            "Z"])
+    return crypt.crypt(cont, "$6$" + sal)
+
+
+#Función que comprueba si una contraseña es válida
+def comprobar_login(salt, palabra, archivosh):
+    for z in archivosh:
+        if crypt.crypt(palabra, salt) == z[1]:
+            return True
+
 
 @route('/')
 def index():
@@ -44,16 +67,16 @@ def reg():
 <!-- ##########################GENERADO POR BOTTLE######################### -->
     <p>
 
-        <form name="login" method="POST" \
+        <form name="login" action="completar_registro" method="POST" \
 accept-charset="utf-8">
 
             <ul>
-                <li><label for="usermail">Dr. Correo</label>
+                <li><label>Dr. Correo</label>
 
                 <input type="email" name="usermail" \
 placeholder="nombre@email.com" required></li>
 
-                <li><label for="password">Password</label>
+                <li><label>Password</label>
 
                 <input type="password" name="password" \
 placeholder="Contraseña" required></li>
@@ -69,7 +92,7 @@ placeholder="Contraseña" required></li>
     ''' + reg_footer
 
 
-@route('/registro', method='POST')
+@route('/completar_registro', method='POST')
 def do_login():
     usermail = request.forms.get('usermail')
     password = request.forms.get('password')
