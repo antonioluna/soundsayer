@@ -22,27 +22,6 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 
 
-#Función que encripta texto
-def encriptar(cont):
-    sal = ""
-    for x in range(8):
-        sal = sal + random.choice(["0", "1", "2", "3", "4", "5", "6", "7", "8",
-            "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
-            "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y",
-            "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-            "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
-            "Z"])
-    return crypt.crypt(cont, "$6$" + sal)
-
-
-#Función que comprueba si una contraseña es válida
-def comprobar_login(salt, palabra, archivosh):
-    for z in archivosh:
-        if crypt.crypt(palabra, salt) == z[1]:
-            return True
-
-
-
 @route('/')
 def index():
     return template('index.tpl')
@@ -68,6 +47,20 @@ def do_login():
    #<option value="12">Suse</option>
 #</select>
     return template('gustos.tpl', nombre=username)
+
+
+@route('/pruebas')
+def pruebas():
+    lista_ciudades = []
+    para_ciudades = {'method': metodos['geo_obtener_ciudades'], "country": '',
+'api_key': api_key, 'format': 'json'}
+    para_ciudades['country'] = "spain"
+    ciudades = (requests.get(scrobble, params=para_ciudades).text)\
+    .encode('utf-8')
+    json_c = json.loads(ciudades)
+    for x in json_c['metros']:
+        print x
+    return lista_ciudades
 
 
 #Url fija de la API
@@ -97,7 +90,7 @@ metodos = {'album_informacion': 'Album.getInfo',
 'geo_chart_semanal': 'Geo.getMetroWeeklyChartlist',
 'geo_artistas_ciudad': 'Geo.getTopArtists',
 'geo_canciones_ciudad': 'Geo.getTopTracks',
-'geo_obtener_ciudades': 'Geo.getMetros',
+'geo_obtener_ciudades': 'geo.getMetros',
 
 'grupo_miembros': 'Group.getMembers',
 'grupos_semana_album_chart': 'Group.getWeeklyAlbumChart',
