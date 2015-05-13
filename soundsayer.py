@@ -4,29 +4,11 @@
 
 from bottle import get, post, template, request, static_file,\
 response, run, route
-from bottle_session import SessionPlugin
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
 import crypt
-from beaker.middleware import SessionMiddleware
-from cork import Cork
-import logging
-
-
-#Gestión json usuarios
-
-json_usuarios = Cork('./static/users')
-session_opts = {
-    'session.cookie_expires': True,
-    'session.encrypt_key': 'please use a random key and keep it secret!',
-    'session.httponly': True,
-    'session.timeout': 3600 * 24,
-    'session.type': 'cookie',
-    'session.validate_key': True,
-}
-SessionMiddleware(session_opts)
 
 
 #Ruta estatica
@@ -71,58 +53,21 @@ def comenzar():
     return template('comenzar.tpl')
 
 
-@route('/registro')
-def registro():
-    return template('registro.tpl')
-
-
-#Intendando hacer request a plantilla de registro
-
-@route('/registro')
-def reg():
-    reg_header = template('reg_header.tpl').encode('utf-8')
-    reg_footer = template('reg_footer.tpl').encode('utf-8')
-    return reg_header + '''
-
-<!-- ##########################GENERADO POR BOTTLE######################### -->
-    <p>
-
-        <form name="login" action="completar_registro" method="POST" \
-accept-charset="utf-8">
-
-            <ul>
-                <li><label>Dr. Correo</label>
-
-                <input type="email" name="usermai
-l" \
-placeholder="nombre@email.com" required></li>
-
-                <li><label>Password</label>
-
-                <input type="password" name="password" \
-placeholder="Contraseña" required></li>
-
-                <li>
-
-                <input type="submit" value="Registrarse" class="button"></li>
-            </ul>
-        </form>
-    </p>
-
-<!-- ##########################GENERADO POR BOTTLE######################### -->
-    ''' + reg_footer
-
-
-@route('/completar_registro', method='POST')
+@route('/gustos', method='POST')
 def do_login():
-    usermail = request.forms.get('usermail')
-    password = request.forms.get('password')
-    print usermail
-    print password
-    #if check_login(usermail, password):
-        #return "<p>Your login information was correct.</p>"
-    #else:
-        #return "<p>Login failed.</p>"
+    username = request.forms.get('username')
+    #Añadir una lista con las ciudades disponibles por la api.
+    #usar este codigo html:
+
+#<select name="OS">
+   #<option value="1">Windows Vista</option>
+   #<option value="2">Windows 7</option>
+   #<option value="3">Windows XP</option>
+   #<option value="10">Fedora</option>
+   #<option value="11">Debian</option>
+   #<option value="12">Suse</option>
+#</select>
+    return template('gustos.tpl', nombre=username)
 
 
 #Url fija de la API

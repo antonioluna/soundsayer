@@ -49,11 +49,16 @@
 					<div class="-3u">
 						<h2>¿Nos conocemos?</h2>
 						<a href="#" class="image full"><img src="/static/images/tango.jpg" alt="" /></a>
-						<p>SoundSayer necesita conocer sus gustos para sugerir las listas de reproducción.
-							<br>Por favor para registrarse introduzca su correo electrónico, su nombre y una contraseña para SoundSayer.
+						<p>Indique a SoundSayer como se llama y comenzaremos con el proceso para generar su lista de reproducción.
+							<br>Por favor introduzca su nombre y pulse en "Comenzar"
+							<form name="login" action="gustos" method="POST" accept-charset="utf-8">
+								<ul>
+									<li><label>¿Como se llama?</label>
+        							<input type="text" name="username" placeholder="Su nombre" required></li>
+        							<li><input type="submit" value="Comenzar" class="button"></li>
+        						</ul>
+        					</form>
 						</p>
-						<p><a href="/registro" class="button">Deseo registrarme</a></p>
-						<p><a href="#" class="button">Iniciar sesión</a></p>
 					</div>
 				</div>
 			</div>
