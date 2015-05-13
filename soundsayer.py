@@ -35,32 +35,56 @@ def comenzar():
 @route('/gustos', method='POST')
 def do_login():
     username = request.forms.get('username')
-    #Añadir una lista con las ciudades disponibles por la api.
-    #usar este codigo html:
-
-#<select name="OS">
-   #<option value="1">Windows Vista</option>
-   #<option value="2">Windows 7</option>
-   #<option value="3">Windows XP</option>
-   #<option value="10">Fedora</option>
-   #<option value="11">Debian</option>
-   #<option value="12">Suse</option>
-#</select>
-    return template('gustos.tpl', nombre=username)
-
-
-@route('/pruebas')
-def pruebas():
     lista_ciudades = []
+    lista_ciudades_ord = ''
+    contador = 0
+
+    #Parámetros para la API
     para_ciudades = {'method': metodos['geo_obtener_ciudades'], "country": '',
 'api_key': api_key, 'format': 'json'}
     para_ciudades['country'] = "spain"
     ciudades = (requests.get(scrobble, params=para_ciudades).text)\
     .encode('utf-8')
+
+    #Convertimos el texto a JSON para tratarlo
     json_c = json.loads(ciudades)
-    for x in json_c['metros']:
-        print x
-    return lista_ciudades
+
+    for x in json_c['metros']['metro']:
+
+        lista_ciudades.append(x['name'])
+
+    lista_ciudades.sort()
+
+    for z in lista_ciudades:
+        contador = contador + 1
+        lista_ciudades_ord = lista_ciudades_ord + ('<option value="'
+        + z + '">' + z + '</option>\n')
+
+    lista_def = '<select name="Ciudad">' + lista_ciudades_ord + '</select>\n'
+
+    cabecera = template('gus_header.tpl', nombre=username)
+    pie = template('gus_footer')
+    return cabecera + lista_def + pie
+
+
+@route('/envio_form', method='POST')
+def resultados():
+    cantautor = request.forms.get('cantautor')
+    Grupo = request.forms.get('Grupo')
+    Cancion1 = request.forms.get('Cancion1')
+    Cancion2 = request.forms.get('Cancion2')
+    Cancion3 = request.forms.get('Cancion3')
+    Cancion4 = request.forms.get('Cancion4')
+    Cancion5 = request.forms.get('Cancion5')
+    ciudad = request.forms.get('Ciudad')
+    lista = [cantautor, Grupo, Cancion1, Cancion2, Cancion3, Cancion4,
+         Cancion5, ciudad]
+    return lista
+
+
+#@route('/pruebas')
+#def pruebas():
+    #return 'jaja'
 
 
 #Url fija de la API
