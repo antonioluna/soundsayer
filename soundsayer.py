@@ -126,14 +126,11 @@ def resultados():
         request.forms.get('artista3'), request.forms.get('artista4'),
         request.forms.get('artista5')]
 
-    artistas_totales = []
-
     text_similares = []
     for x in artistas:
+        x.lower()
         para_similares = {'method': metodos['artista_similar'],
         'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
-
-        artistas_totales.append(x)
 
         text_similares.append(requests.get(scrobble,
         params=para_similares).text.encode('utf-8'))
@@ -142,9 +139,13 @@ def resultados():
     for t in text_similares:
         json_similar = json.loads(t)
         for i in json_similar["similarartists"]["artist"]:
-            artistas_similares.append(i["name"])
+            artistas_similares.append(i["name"].lower())
 
-    return artistas_similares
+    for r in artistas_similares:
+        if r not in artistas:
+            artistas.append(r)
+
+    return encuentracanciones(artistas)
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
