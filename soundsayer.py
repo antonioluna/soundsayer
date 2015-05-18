@@ -21,6 +21,32 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 
 
+def encuentracanciones(lista):
+
+    #Lista para almacenar los json con los datos de las canciones
+    canciones_list = []
+
+    #Recorremos la lista con los datos del formulario
+    for x in lista:
+
+        #Obtenemos las 5 canciones mas escuchadas del cantautor
+        para_canta_mejores = {'method': metodos['artista_mejores_canciones'],
+        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
+
+        canciones_list.append(requests.get(scrobble,
+        params=para_canta_mejores).text)
+
+    informacion_canciones = {}
+    for z in range(len(canciones_list)):
+        total_canciones = []
+        datos = json.loads(canciones_list[z].encode('utf-8'))
+        for y in datos["toptracks"]["track"]:
+            total_canciones.append(y["name"])
+        informacion_canciones[lista[z]] = total_canciones
+
+    return informacion_canciones
+
+
     #########################################################################
     #                                                                       #
     #                      Ruta de la página principal                      #
@@ -96,51 +122,29 @@ def do_login():
 def resultados():
 
     #Lista con datos del formulario
-    artistas = [request.forms.get('Cancion1'), request.forms.get('Cancion2'),
-        request.forms.get('Cancion3'), request.forms.get('Cancion4'),
-        request.forms.get('Cancion5')]
+    artistas = [request.forms.get('artista1'), request.forms.get('artista2'),
+        request.forms.get('artista3'), request.forms.get('artista4'),
+        request.forms.get('artista5')]
 
-    #Lista para almacenar los json con los datos de las canciones
-    canciones_list = []
+    artistas_totales = []
 
-    #Recorremos la lista con los datos del formulario
+    text_similares = []
     for x in artistas:
-
-        #Obtenemos las 5 canciones mas escuchadas del cantautor
-        para_canta_mejores = {'method': metodos['artista_mejores_canciones'],
+        para_similares = {'method': metodos['artista_similar'],
         'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
-        canciones_list.append(requests.get(scrobble,
-        params=para_canta_mejores).text)
+        artistas_totales.append(x)
 
-    informacion_canciones = {}
-    for z in range(len(canciones_list)):
-        total_canciones = []
-        datos = json.loads(canciones_list[z].encode('utf-8'))
-        for y in datos["toptracks"]["track"]:
-            total_canciones.append(y["name"])
-        informacion_canciones[artistas[z]] = total_canciones
+        text_similares.append(requests.get(scrobble,
+        params=para_similares).text.encode('utf-8'))
 
+    artistas_similares = []
+    for t in text_similares:
+        json_similar = json.loads(t)
+        for i in json_similar["similarartists"]["artist"]:
+            artistas_similares.append(i["name"])
 
-    Ciudad = request.forms.get('Ciudad')
-    #Obtenemos las lista de los charts disponibles por ciudad
-    para_geo_top = {'method': metodos['geo_chart_semanal'], 'api_key': api_key,
-        'format': 'json', 'limit': '10', 'metro': Ciudad}
-    geo_top = requests.get(scrobble, params=para_geo_top)
-
-    #Recorremos geo_top para obtener la página para el chart a continuación
-
-    pagina = ''
-
-    para_chart = {'method': metodos['chart_canciones'], 'api_key': api_key,
-        'format': 'json', 'page': pagina}
-
-    return informacion_canciones
-
-#@route('/pruebas')
-#def pruebas():
-    #return 'jaja'
-
+    return artistas_similares
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
@@ -157,7 +161,7 @@ metodos = {'album_informacion': 'Album.getInfo',
 
 'artista_corregir': 'artist.getcorrection',
 'artista_informacion': 'artist.getInfo', 'artista_eventos': 'artist.getEvents',
-'artista_similar': 'artist.getSimilar',
+'artista_similar': 'artist.getsimilar',
 'artista_mejores_discos': 'artist.getTopAlbums',
 'artista_mejores_canciones': 'artist.gettoptracks',
 'artista_': 'artist.getTags', 'artista_comentarios': 'artist.getShouts',
