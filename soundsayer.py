@@ -7,7 +7,6 @@ import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
-import crypt
 
 
 #Ruta estatica
@@ -31,7 +30,7 @@ def encuentracanciones(lista):
 
         #Obtenemos las 5 canciones mas escuchadas del cantautor
         para_canta_mejores = {'method': metodos['artista_mejores_canciones'],
-        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
+        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '3'}
 
         canciones_list.append(requests.get(scrobble,
         params=para_canta_mejores).text)
@@ -42,12 +41,21 @@ def encuentracanciones(lista):
         datos = json.loads(canciones_list[z].encode('utf-8'))
         for y in datos["toptracks"]["track"]:
             total_canciones.append(y["name"])
-        informacion_canciones[lista[z]] = total_canciones
+            informacion_canciones[lista[z]] = total_canciones
+
+    #canciones = []
+    #for cn in lista:
+        #for lst in informacion_canciones[cn]:
+            #cancion = lst
+            #para_youtube = {'q=': lst, 'part': 'id', 'maxResults': '1',
+            #'key': api_key_yt}
+            #print requests.get(youtube, params=para_youtube).text
+
 
     return informacion_canciones
 
 
-    #########################################################################
+    ################3#########################################################
     #                                                                       #
     #                      Ruta de la página principal                      #
     #                                                                       #
@@ -130,7 +138,7 @@ def resultados():
     for x in artistas:
         x.lower()
         para_similares = {'method': metodos['artista_similar'],
-        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
+        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '10'}
 
         text_similares.append(requests.get(scrobble,
         params=para_similares).text.encode('utf-8'))
@@ -149,10 +157,17 @@ def resultados():
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
+youtube = 'https://www.googleapis.com/youtube/v3/search?'
 
 #API KEY
 
 api_key = 'a481b1c89d1295cfc279eddb15090338'
+api_key_yt = 'AIzaSyCwleRrkDzTZV964P87EKfva_zTmrAWhYs'
+busqueda = ""
+
+#URL FIJA VIDEOS YOUTUBE
+
+video_url = 'https://www.youtube.com/watch?v='
 
 #Métodos aceptados por la API
 
