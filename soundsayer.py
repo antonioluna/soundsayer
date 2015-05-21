@@ -43,15 +43,28 @@ def encuentracanciones(lista):
             total_canciones.append(y["name"])
             informacion_canciones[lista[z]] = total_canciones
 
-    #canciones = []
-    #for cn in lista:
-        #for lst in informacion_canciones[cn]:
-            #cancion = lst
-            #para_youtube = {'q=': lst, 'part': 'id', 'maxResults': '1',
-            #'key': api_key_yt}
-            #print requests.get(youtube, params=para_youtube).text
+    canciones = []
+    for cn in lista:
+        videos_artista = []
+        for lst in informacion_canciones[cn]:
 
+            para_youtube = {'q': lst, 'part': 'id',
+            'maxResults': '1', 'key': api_key_yt}
 
+            yt_resp = requests.get(youtube, params=para_youtube)
+
+            if yt_resp.status_code == 200:
+                yt_json = yt_resp.json()
+
+                if yt_json["items"][0]["id"].has_key('videoId'):
+
+                    cancion_yt = yt_json["items"][0]["id"]["videoId"]
+
+                    videos_artista.append(video_url + cancion_yt)
+
+                    canciones.append(videos_artista)
+
+    print canciones
     return informacion_canciones
 
 
@@ -138,7 +151,7 @@ def resultados():
     for x in artistas:
         x.lower()
         para_similares = {'method': metodos['artista_similar'],
-        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '10'}
+        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
         text_similares.append(requests.get(scrobble,
         params=para_similares).text.encode('utf-8'))
@@ -163,7 +176,6 @@ youtube = 'https://www.googleapis.com/youtube/v3/search?'
 
 api_key = 'a481b1c89d1295cfc279eddb15090338'
 api_key_yt = 'AIzaSyCwleRrkDzTZV964P87EKfva_zTmrAWhYs'
-busqueda = ""
 
 #URL FIJA VIDEOS YOUTUBE
 
