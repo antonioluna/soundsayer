@@ -23,49 +23,52 @@ def server_static(filepath):
 def encuentracanciones(lista):
 
     #Lista para almacenar los json con los datos de las canciones
-    canciones_list = []
 
-    #Recorremos la lista con los datos del formulario
+    canciones = {}
+
     for x in lista:
-
-        #Obtenemos las 5 canciones mas escuchadas del cantautor
+        canciones_artista = []
+        #Obtenemos las 3 canciones mas escuchadas del cantautor
         para_canta_mejores = {'method': metodos['artista_mejores_canciones'],
         'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '3'}
 
-        canciones_list.append(requests.get(scrobble,
-        params=para_canta_mejores).text)
+        mejores_artista = requests.get(scrobble,
+        params=para_canta_mejores).json()
+        for y in mejores_artista["toptracks"]["track"]:
+            datos_canciones = []
+            datos_canciones.append(y["name"])
 
-    informacion_canciones = {}
-    for z in range(len(canciones_list)):
-        total_canciones = []
-        datos = json.loads(canciones_list[z].encode('utf-8'))
-        for y in datos["toptracks"]["track"]:
-            total_canciones.append(y["name"])
-            informacion_canciones[lista[z]] = total_canciones
+            if y.has_key("image"):
+                datos_canciones.append(y["image"][3]['#text'])
 
-    canciones = []
-    for cn in lista:
-        videos_artista = []
-        for lst in informacion_canciones[cn]:
+            canciones_artista.extend([datos_canciones])
 
-            para_youtube = {'q': lst, 'part': 'id',
-            'maxResults': '1', 'key': api_key_yt}
+        canciones[x] = canciones_artista
 
-            yt_resp = requests.get(youtube, params=para_youtube)
 
-            if yt_resp.status_code == 200:
-                yt_json = yt_resp.json()
+    #canciones = []
+    #for cn in lista:
+        #videos_artista = []
+        #for lst in informacion_canciones[cn]:
 
-                if yt_json["items"][0]["id"].has_key('videoId'):
+            #para_youtube = {'q': lst, 'part': 'id',
+            #'maxResults': '1', 'key': api_key_yt}
 
-                    cancion_yt = yt_json["items"][0]["id"]["videoId"]
+            #yt_resp = requests.get(youtube, params=para_youtube)
 
-                    videos_artista.append(video_url + cancion_yt)
+            #if yt_resp.status_code == 200:
+                #yt_json = yt_resp.json()
 
-                    canciones.append(videos_artista)
+                #if yt_json["items"][0]["id"].has_key('videoId'):
 
-    print canciones
-    return informacion_canciones
+                    #cancion_yt = yt_json["items"][0]["id"]["videoId"]
+
+                    #videos_artista.append(video_url + cancion_yt)
+
+                    #canciones.append(videos_artista)
+
+    #print canciones
+    #return informacion_canciones
 
 
     ################3#########################################################
