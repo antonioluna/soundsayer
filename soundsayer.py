@@ -108,13 +108,9 @@ def do_login():
     #Parámetros para la API
     para_ciudades = {'method': metodos['geo_obtener_ciudades'],
     "country": 'spain', 'api_key': api_key, 'format': 'json'}
-    ciudades = (requests.get(scrobble, params=para_ciudades).text)\
-    .encode('utf-8')
+    ciudades = requests.get(scrobble, params=para_ciudades).json()
 
-    #Convertimos el texto a JSON para tratarlo
-    json_c = json.loads(ciudades)
-
-    for x in json_c['metros']['metro']:
+    for x in ciudades['metros']['metro']:
 
         lista_ciudades.append(x['name'])
 
@@ -147,26 +143,19 @@ def resultados():
         request.forms.get('artista3'), request.forms.get('artista4'),
         request.forms.get('artista5')]
 
-    text_similares = []
+    artistas_totales = []
     for x in artistas:
-        x.lower()
         para_similares = {'method': metodos['artista_similar'],
         'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
-        text_similares.append(requests.get(scrobble,
-        params=para_similares).text.encode('utf-8'))
+        similar = requests.get(scrobble, params=para_similares).json()
+        artistas_totales.append(x)
+        for at in similar["similarartists"]["artist"]:
 
-    artistas_similares = []
-    for t in text_similares:
-        json_similar = json.loads(t)
-        for i in json_similar["similarartists"]["artist"]:
-            artistas_similares.append(i["name"].lower())
+            if at["name"] not in artistas:
+                artistas_totales.append(at["name"])
 
-    for r in artistas_similares:
-        if r not in artistas:
-            artistas.append(r)
-
-    return encuentracanciones(artistas)
+    return encuentracanciones(artistas_totales)
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
