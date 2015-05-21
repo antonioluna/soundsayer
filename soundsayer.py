@@ -25,6 +25,7 @@ def encuentracanciones(lista):
     #Lista para almacenar los json con los datos de las canciones
 
     canciones = {}
+    lista_total = []
 
     for x in lista:
         canciones_artista = []
@@ -34,6 +35,7 @@ def encuentracanciones(lista):
 
         mejores_artista = requests.get(scrobble,
         params=para_canta_mejores).json()
+
         for y in mejores_artista["toptracks"]["track"]:
             datos_canciones = []
             datos_canciones.append(y["name"])
@@ -53,10 +55,13 @@ def encuentracanciones(lista):
 
                     cancion_yt = yt_json["items"][0]["id"]["videoId"]
                     datos_canciones.append(video_url + cancion_yt)
+                    lista_total.append(cancion_yt)
 
             canciones_artista.extend([datos_canciones])
 
         canciones[x] = canciones_artista
+
+    canciones["reproductor"] = lista_total
 
     return canciones
 
@@ -148,7 +153,22 @@ def resultados():
             if at["name"] not in artistas:
                 artistas_totales.append(at["name"])
 
-    return encuentracanciones(artistas_totales)
+    json_canciones = encuentracanciones(artistas_totales)
+
+    eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
+    primer_video = json_canciones["reproductor"][eleccion]
+    json_canciones["reproductor"].pop(eleccion)
+
+    video_ids = ""
+
+    for ids in json_canciones["reproductor"]:
+        video_ids = video_ids + ids + ","
+
+    video_ids = video_ids + "&"
+    video_ids.replace(",&", "&")
+
+    return template("rep_header.tpl", lista_videos=video_ids,
+    video1=primer_video)
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'

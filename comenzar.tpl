@@ -47,10 +47,12 @@
 			<div class="container">
 				<div class="row">
 					<div class="-3u">
-						<h2>¿Nos conocemos?</h2>
-						<a href="#" class="image full"><img src="/static/images/tango.jpg" alt="" /></a>
-						<p>Indique a SoundSayer como se llama y comenzaremos con el proceso para generar su lista de reproducción.
+						<p>Indique a SoundSayer como se llama y comenzaremos con el proceso para generar
+
+							<br> su lista de reproducción.
+							
 							<br>Por favor introduzca su nombre y pulse en "Comenzar"
+							
 							<form name="login" action="gustos" method="POST" accept-charset="utf-8">
 								<ul>
 									<li><label>¿Como se llama?</label>
