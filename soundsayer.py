@@ -41,34 +41,24 @@ def encuentracanciones(lista):
             if y.has_key("image"):
                 datos_canciones.append(y["image"][3]['#text'])
 
+            para_youtube = {'q': x + " " + y["name"], 'part': 'id',
+            'maxResults': '1', 'key': api_key_yt}
+
+            yt_resp = requests.get(youtube, params=para_youtube)
+            if yt_resp.status_code == 200:
+
+                yt_json = yt_resp.json()
+
+                if yt_json["items"][0]["id"].has_key('videoId'):
+
+                    cancion_yt = yt_json["items"][0]["id"]["videoId"]
+                    datos_canciones.append(video_url + cancion_yt)
+
             canciones_artista.extend([datos_canciones])
 
         canciones[x] = canciones_artista
 
-
-    #canciones = []
-    #for cn in lista:
-        #videos_artista = []
-        #for lst in informacion_canciones[cn]:
-
-            #para_youtube = {'q': lst, 'part': 'id',
-            #'maxResults': '1', 'key': api_key_yt}
-
-            #yt_resp = requests.get(youtube, params=para_youtube)
-
-            #if yt_resp.status_code == 200:
-                #yt_json = yt_resp.json()
-
-                #if yt_json["items"][0]["id"].has_key('videoId'):
-
-                    #cancion_yt = yt_json["items"][0]["id"]["videoId"]
-
-                    #videos_artista.append(video_url + cancion_yt)
-
-                    #canciones.append(videos_artista)
-
-    #print canciones
-    #return informacion_canciones
+    return canciones
 
 
     ################3#########################################################
