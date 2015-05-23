@@ -2,7 +2,7 @@
 
 #Importamos librerias
 
-from bottle import template, request, static_file, response, run, route
+from bottle import template, request, static_file, run, route
 import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
@@ -27,7 +27,7 @@ def correbusca(lform):
     for art in lform:
         no_modificado = art
 
-        str(art).replace(" ", "").encode("utf-8")
+        str(art).replace(" ", "").encode('utf-8')
 
         para_correccion = {'method': metodos['artista_corregir'],
         'artist': art, 'api_key': api_key, 'format': 'json'}
@@ -47,12 +47,13 @@ por otro" % (no_modificado)
             buscar = requests.get(scrobble, params=para_buscar).json()
             a_devolver.append(buscar['results']['artistmatches']['artist']
             ['name'])
-        else:
+
+        if type(corregido['corrections']) is dict:
             correccion_artista = corregido['corrections']
             a_devolver.append(correccion_artista['correction']['artist']
             ['name'])
 
-        return a_devolver
+    return a_devolver
 
 def encuentracanciones(lista):
 
@@ -175,38 +176,41 @@ def resultados():
         request.forms.get('artista3'), request.forms.get('artista4'),
         request.forms.get('artista5')]
 
-    correbusca(formulario)
+    artistas = correbusca(formulario)
+    print artistas
 
-    #artistas = [artista1, artista2, artista3, artista4, artista5]
+    if type(artistas) is str:
+        return artistas
 
-    #artistas_totales = []
-    #for x in artistas:
-        #para_similares = {'method': metodos['artista_similar'],
-        #'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
-        #similar = requests.get(scrobble, params=para_similares).json()
-        #artistas_totales.append(x)
-        #for at in similar["similarartists"]["artist"]:
+    artistas_totales = []
+    for x in artistas:
+        para_similares = {'method': metodos['artista_similar'],
+        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
-            #if at["name"] not in artistas:
-                #artistas_totales.append(at["name"])
+        similar = requests.get(scrobble, params=para_similares).json()
+        artistas_totales.append(x)
+        for at in similar["similarartists"]["artist"]:
 
-    #json_canciones = encuentracanciones(artistas_totales)
+            if at["name"] not in artistas:
+                artistas_totales.append(at["name"])
 
-    #eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
-    #primer_video = json_canciones["reproductor"][eleccion]
-    #json_canciones["reproductor"].pop(eleccion)
+    json_canciones = encuentracanciones(artistas_totales)
 
-    #video_ids = ""
+    eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
+    primer_video = json_canciones["reproductor"][eleccion]
+    json_canciones["reproductor"].pop(eleccion)
 
-    #for ids in json_canciones["reproductor"]:
-        #video_ids = video_ids + ids + ","
+    video_ids = ""
 
-    #video_ids = video_ids + "&"
-    #video_ids.replace(",&", "&")
+    for ids in json_canciones["reproductor"]:
+        video_ids = video_ids + ids + ","
 
-    #return template("rep_header.tpl", lista_videos=video_ids,
-    #video1=primer_video)
+    video_ids = video_ids + "&"
+    video_ids.replace(",&", "&")
+
+    return template("rep_header.tpl", lista_videos=video_ids,
+    video1=primer_video)
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
