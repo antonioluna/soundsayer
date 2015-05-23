@@ -197,9 +197,8 @@ def resultados():
 
     json_canciones = encuentracanciones(artistas_totales)
 
-    eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
-    primer_video = json_canciones["reproductor"][eleccion]
-    json_canciones["reproductor"].pop(eleccion)
+    primer_video = json_canciones["reproductor"][0]
+    json_canciones["reproductor"].pop(0)
 
     video_ids = ""
 
