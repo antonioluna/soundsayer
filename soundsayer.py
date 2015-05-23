@@ -20,6 +20,40 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 
 
+def correbusca(lform):
+
+    a_devolver = []
+
+    for art in lform:
+        no_modificado = art
+
+        str(art).replace(" ", "").encode("utf-8")
+
+        para_correccion = {'method': metodos['artista_corregir'],
+        'artist': art, 'api_key': api_key, 'format': 'json'}
+        corregido = requests.get(scrobble, params=para_correccion).json()
+
+
+
+        if corregido.has_key('message'):
+            return "Existen problemas con el artista %s, por favor cámbielo \
+por otro" % (no_modificado)
+
+        if corregido['corrections'] == '\n                ':
+
+            para_buscar = {'method': metodos['artista_buscar'],
+        'artist': art, 'api_key': api_key, 'format': 'json', 'limit': '1'}
+
+            buscar = requests.get(scrobble, params=para_buscar).json()
+            a_devolver.append(buscar['results']['artistmatches']['artist']
+            ['name'])
+        else:
+            correccion_artista = corregido['corrections']
+            a_devolver.append(correccion_artista['correction']['artist']
+            ['name'])
+
+        return a_devolver
+
 def encuentracanciones(lista):
 
     #Lista para almacenar los json con los datos de las canciones
@@ -137,38 +171,42 @@ def do_login():
 def resultados():
 
     #Lista con datos del formulario
-    artistas = [request.forms.get('artista1'), request.forms.get('artista2'),
+    formulario = [request.forms.get('artista1'), request.forms.get('artista2'),
         request.forms.get('artista3'), request.forms.get('artista4'),
         request.forms.get('artista5')]
 
-    artistas_totales = []
-    for x in artistas:
-        para_similares = {'method': metodos['artista_similar'],
-        'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
+    correbusca(formulario)
 
-        similar = requests.get(scrobble, params=para_similares).json()
-        artistas_totales.append(x)
-        for at in similar["similarartists"]["artist"]:
+    #artistas = [artista1, artista2, artista3, artista4, artista5]
 
-            if at["name"] not in artistas:
-                artistas_totales.append(at["name"])
+    #artistas_totales = []
+    #for x in artistas:
+        #para_similares = {'method': metodos['artista_similar'],
+        #'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '5'}
 
-    json_canciones = encuentracanciones(artistas_totales)
+        #similar = requests.get(scrobble, params=para_similares).json()
+        #artistas_totales.append(x)
+        #for at in similar["similarartists"]["artist"]:
 
-    eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
-    primer_video = json_canciones["reproductor"][eleccion]
-    json_canciones["reproductor"].pop(eleccion)
+            #if at["name"] not in artistas:
+                #artistas_totales.append(at["name"])
 
-    video_ids = ""
+    #json_canciones = encuentracanciones(artistas_totales)
 
-    for ids in json_canciones["reproductor"]:
-        video_ids = video_ids + ids + ","
+    #eleccion = random.choice([0, (len(json_canciones["reproductor"]) - 1)])
+    #primer_video = json_canciones["reproductor"][eleccion]
+    #json_canciones["reproductor"].pop(eleccion)
 
-    video_ids = video_ids + "&"
-    video_ids.replace(",&", "&")
+    #video_ids = ""
 
-    return template("rep_header.tpl", lista_videos=video_ids,
-    video1=primer_video)
+    #for ids in json_canciones["reproductor"]:
+        #video_ids = video_ids + ids + ","
+
+    #video_ids = video_ids + "&"
+    #video_ids.replace(",&", "&")
+
+    #return template("rep_header.tpl", lista_videos=video_ids,
+    #video1=primer_video)
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
