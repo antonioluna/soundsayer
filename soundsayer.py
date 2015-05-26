@@ -131,8 +131,6 @@ def encuentracanciones(lista):
     return canciones
 
 
-
-
     ################3#########################################################
     #                                                                       #
     #                      Ruta de la página principal                      #
