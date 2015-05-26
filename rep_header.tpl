@@ -37,7 +37,7 @@
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
-						<li><a href="/gustos">Comenzar de nuevo</a></li>
+						<li><a href="/">Comenzar de nuevo</a></li>
 					</ul>
 				</nav>
 			</div>

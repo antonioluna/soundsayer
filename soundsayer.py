@@ -9,6 +9,7 @@ import json
 import random
 import unicodedata
 
+
 #Ruta estatica
 @route('/static/<filepath:path>')
 def server_static(filepath):
