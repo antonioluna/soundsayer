@@ -48,8 +48,9 @@ def correbusca(lform):
         #Aunque el artista sea incorrecto, audioscrobble devuelve est_cod 200
         #trato el mensaje directamente para que no haya excepción
         if 'message' in corregido:
-            return "Existen problemas con el artista %s, por favor cámbielo \
+            error = "Existen problemas con el artista %s, por favor cámbielo \
 por otro" % (no_modificado)
+            return error
 
         #Si el artista está bien escrito, la API nos devuelve
         #'\n                ' por lo que pasamos a introducir el artista en la
@@ -128,6 +129,8 @@ def encuentracanciones(lista):
 
     #Devolvemos un json con toda la información obtenida
     return canciones
+
+
 
 
     ################3#########################################################
@@ -214,7 +217,8 @@ def resultados():
     #Si ha habido un fallo artistas será un str, devolvemos una página con el
     #error
     if type(artistas) is str:
-        return artistas
+        error = artistas
+        return template('error.tpl', motivo=error)
 
     #Una vez tenemos los artistas principales corregidos, buscamos otros
     #similares
@@ -250,6 +254,7 @@ def resultados():
 
     return template("rep_header.tpl", lista_videos=video_ids,
     video1=primer_video)
+
 
 #Url fija de la API
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
