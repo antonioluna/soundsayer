@@ -40,6 +40,8 @@ def correbusca(lform):
 
         art = quitar_tildes(entrada)
 
+        art = str(art)
+
         para_correccion = {'method': metodos['artista_corregir'],
         'artist': art, 'api_key': api_key, 'format': 'json'}
         corregido = requests.get(scrobble, params=para_correccion).json()
@@ -52,12 +54,14 @@ por otro" % (no_modificado)
 
         #Si el artista está bien escrito, la API nos devuelve
         #'\n                ' por lo que pasamos a introducir el artista en la
-        #lista directamente
+        #lista directamente con el nombre inroducido por el usuario
         if corregido['corrections'] == '\n                ':
 
             para_buscar = {'method': metodos['artista_buscar'],
-        'artist': art, 'api_key': api_key, 'format': 'json', 'limit': '1'}
+        'artist': no_modificado, 'api_key': api_key, 'format': 'json',
+         'limit': '1'}
             buscar = requests.get(scrobble, params=para_buscar).json()
+
             a_devolver.append(buscar['results']['artistmatches']['artist']
             ['name'])
 
@@ -222,8 +226,8 @@ def resultados():
 
         similar = requests.get(scrobble, params=para_similares).json()
         artistas_totales.append(x)
-        for at in similar["similarartists"]["artist"]:
 
+        for at in similar["similarartists"]["artist"]:
             if at["name"] not in artistas:
                 artistas_totales.append(at["name"])
 
