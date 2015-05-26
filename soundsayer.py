@@ -20,12 +20,15 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 
 
+#Esta convierte el texto en unicode para después recorrerlo y normalizarlo
 def quitar_tildes(texto):
     texto = unicode(texto, 'utf-8')
     return ''.join((cr for cr in unicodedata.normalize('NFD',
          texto) if unicodedata.category(cr) != 'Mn'))
 
 
+#Esta función usa un método de la API de audioscrobble para corregir el nombre
+#de los artistas introducidos
 def correbusca(lform):
 
     a_devolver = []
@@ -47,21 +50,26 @@ def correbusca(lform):
             return "Existen problemas con el artista %s, por favor cámbielo \
 por otro" % (no_modificado)
 
+        #Si el artista está bien escrito, la API nos devuelve
+        #'\n                ' por lo que pasamos a introducir el artista en la
+        #lista directamente
         if corregido['corrections'] == '\n                ':
 
             para_buscar = {'method': metodos['artista_buscar'],
         'artist': art, 'api_key': api_key, 'format': 'json', 'limit': '1'}
-
             buscar = requests.get(scrobble, params=para_buscar).json()
             a_devolver.append(buscar['results']['artistmatches']['artist']
             ['name'])
 
+        #Si la API ha tenido que corregir el nombre, nos devolverá un
+        #diccionario
         if type(corregido['corrections']) is dict:
             correccion_artista = corregido['corrections']
             a_devolver.append(correccion_artista['correction']['artist']
             ['name'])
 
     return a_devolver
+
 
 def encuentracanciones(lista):
 
@@ -72,6 +80,7 @@ def encuentracanciones(lista):
 
     for x in lista:
         canciones_artista = []
+
         #Obtenemos las 3 canciones mas escuchadas del cantautor
         para_canta_mejores = {'method': metodos['artista_mejores_canciones'],
         'artist': x, 'api_key': api_key, 'format': 'json', 'limit': '3'}
@@ -79,17 +88,25 @@ def encuentracanciones(lista):
         mejores_artista = requests.get(scrobble,
         params=para_canta_mejores).json()
 
+        #Añadimos las canciones
+
         for y in mejores_artista["toptracks"]["track"]:
             datos_canciones = []
             datos_canciones.append(y["name"])
 
+            #Guardamos las imágenes para futuro uso
             if "image" in y:
                 datos_canciones.append(y["image"][3]['#text'])
+
+            #Tratamos los ID de los videos de youtube
 
             para_youtube = {'q': x + " " + y["name"], 'part': 'id',
             'maxResults': '1', 'key': api_key_yt}
 
             yt_resp = requests.get(youtube, params=para_youtube)
+
+            #Aqui sí funcionan los st.cd
+
             if yt_resp.status_code == 200:
 
                 yt_json = yt_resp.json()
@@ -106,6 +123,7 @@ def encuentracanciones(lista):
 
     canciones["reproductor"] = lista_total
 
+    #Devolvemos un json con toda la información obtenida
     return canciones
 
 
@@ -114,6 +132,7 @@ def encuentracanciones(lista):
     #                      Ruta de la página principal                      #
     #                                                                       #
     #########################################################################
+
 
 @route('/')
 def index():
@@ -151,6 +170,8 @@ def do_login():
     "country": 'spain', 'api_key': api_key, 'format': 'json'}
     ciudades = requests.get(scrobble, params=para_ciudades).json()
 
+    #Obtenemos la lista de ciudades para basar la busqueda de canciones por
+    #las mas escuchadas por ciudad (mas adelante)
     for x in ciudades['metros']['metro']:
 
         lista_ciudades.append(x['name'])
@@ -184,11 +205,16 @@ def resultados():
         request.forms.get('artista3'), request.forms.get('artista4'),
         request.forms.get('artista5')]
 
+    #Mando los datos introducidos por el usuario a la función correbusca
     artistas = correbusca(formulario)
 
+    #Si ha habido un fallo artistas será un str, devolvemos una página con el
+    #error
     if type(artistas) is str:
         return artistas
 
+    #Una vez tenemos los artistas principales corregidos, buscamos otros
+    #similares
     artistas_totales = []
     for x in artistas:
         para_similares = {'method': metodos['artista_similar'],
@@ -201,17 +227,22 @@ def resultados():
             if at["name"] not in artistas:
                 artistas_totales.append(at["name"])
 
+    #Usamos la función encuentracanciones
     json_canciones = encuentracanciones(artistas_totales)
 
+    #Debido al formato del reproductor de youtube, debemos seleccionar un id
+    #para ponerlo como primer vídeo
     primer_video = json_canciones["reproductor"][0]
     json_canciones["reproductor"].pop(0)
 
+    #Generamos la lista con los ids para el reproductor
     video_ids = ""
-
     for ids in json_canciones["reproductor"]:
         video_ids = video_ids + ids + ","
 
     video_ids = video_ids + "&"
+
+    #Eliminamos la ultima coma para que no de error
     video_ids.replace(",&", "&")
 
     return template("rep_header.tpl", lista_videos=video_ids,
@@ -221,16 +252,17 @@ def resultados():
 scrobble = 'http://ws.audioscrobbler.com/2.0/?'
 youtube = 'https://www.googleapis.com/youtube/v3/search?'
 
-#API KEY
+#API KEYS
 
 api_key = 'a481b1c89d1295cfc279eddb15090338'
 api_key_yt = 'AIzaSyCwleRrkDzTZV964P87EKfva_zTmrAWhYs'
 
-#URL FIJA VIDEOS YOUTUBE
+#URL FIJA VIDEOS YOUTUBE (para implemetación de urls completas mas adelante)
 
 video_url = 'https://www.youtube.com/watch?v='
 
-#Métodos aceptados por la API
+#Métodos aceptados por la API (los que están en minusculas son los utilizados
+#por el momento
 
 metodos = {'album_informacion': 'Album.getInfo',
 'album_comentarios': 'Album.getShouts', 'album_etiquetas': 'Album.getTags',
