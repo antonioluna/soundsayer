@@ -41,13 +41,16 @@
 					</ul>
 				</nav>
 			</div>
+		</div>
 
 		<!-- Footer -->
 		<div id="featured">
 			<div class="container">
 				<div class="row">
 					<div class="-3u">
-						<p>Indique a SoundSayer como se llama y comenzaremos con el proceso para generar
+						<p>
+							Indique a SoundSayer como se llama y comenzaremos con el proceso para generar
+						</p>
 
 							<br> su lista de reproducción.
 							
@@ -60,7 +63,6 @@
         							<li><input type="submit" value="Comenzar" class="button"></li>
         						</ul>
         					</form>
-						</p>
 					</div>
 				</div>
 			</div>

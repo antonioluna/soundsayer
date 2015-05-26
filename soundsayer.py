@@ -36,9 +36,7 @@ def correbusca(lform):
     for art in lform:
         no_modificado = art
 
-        entrada = str((art).replace(" ", ""))
-
-        art = quitar_tildes(entrada)
+        art = quitar_tildes(art)
 
         art = str(art)
 
