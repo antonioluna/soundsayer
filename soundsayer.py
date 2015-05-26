@@ -7,7 +7,7 @@ import requests
 from requests_oauthlib import OAuth1, OAuth1Session
 import json
 import random
-
+import unicodedata
 
 #Ruta estatica
 @route('/static/<filepath:path>')
@@ -20,6 +20,12 @@ def server_static(filepath):
 #------------------------------------------------------------------------------
 
 
+def quitar_tildes(texto):
+    texto = unicode(texto, 'utf-8')
+    return ''.join((cr for cr in unicodedata.normalize('NFD',
+         texto) if unicodedata.category(cr) != 'Mn'))
+
+
 def correbusca(lform):
 
     a_devolver = []
@@ -27,15 +33,17 @@ def correbusca(lform):
     for art in lform:
         no_modificado = art
 
-        str(art).replace(" ", "").encode('utf-8')
+        entrada = str((art).replace(" ", ""))
+
+        art = quitar_tildes(entrada)
 
         para_correccion = {'method': metodos['artista_corregir'],
         'artist': art, 'api_key': api_key, 'format': 'json'}
         corregido = requests.get(scrobble, params=para_correccion).json()
 
-
-
-        if corregido.has_key('message'):
+        #Aunque el artista sea incorrecto, audioscrobble devuelve est_cod 200
+        #trato el mensaje directamente para que no haya excepción
+        if 'message' in corregido:
             return "Existen problemas con el artista %s, por favor cámbielo \
 por otro" % (no_modificado)
 
@@ -75,7 +83,7 @@ def encuentracanciones(lista):
             datos_canciones = []
             datos_canciones.append(y["name"])
 
-            if y.has_key("image"):
+            if "image" in y:
                 datos_canciones.append(y["image"][3]['#text'])
 
             para_youtube = {'q': x + " " + y["name"], 'part': 'id',
@@ -86,7 +94,7 @@ def encuentracanciones(lista):
 
                 yt_json = yt_resp.json()
 
-                if yt_json["items"][0]["id"].has_key('videoId'):
+                if 'videoId' in yt_json["items"][0]["id"]:
 
                     cancion_yt = yt_json["items"][0]["id"]["videoId"]
                     datos_canciones.append(video_url + cancion_yt)
@@ -177,11 +185,9 @@ def resultados():
         request.forms.get('artista5')]
 
     artistas = correbusca(formulario)
-    print artistas
 
     if type(artistas) is str:
         return artistas
-
 
     artistas_totales = []
     for x in artistas:
